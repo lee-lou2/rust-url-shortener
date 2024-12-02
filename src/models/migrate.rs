@@ -14,6 +14,7 @@ pub fn migrate(db: &Connection) -> Result<(), rusqlite::Error> {
             default_fallback_url TEXT NOT NULL,
             hashed_value TEXT NOT NULL,
             webhook_url TEXT NULL,
+            head_html TEXT NULL,
             is_verified INTEGER NOT NULL DEFAULT 0,
             is_deleted INTEGER NOT NULL DEFAULT 0
         )",
@@ -32,9 +33,6 @@ pub fn migrate(db: &Connection) -> Result<(), rusqlite::Error> {
         )",
         [],
     )?;
-    db.execute(
-        "CREATE INDEX IF NOT EXISTS code ON email_auth (code)",
-        [],
-    )?;
+    db.execute("CREATE INDEX IF NOT EXISTS code ON email_auth (code)", [])?;
     Ok(())
 }

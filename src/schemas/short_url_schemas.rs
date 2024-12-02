@@ -1,6 +1,5 @@
 use serde::{Deserialize, Serialize};
 
-
 // URL 요청 구조체
 #[derive(Deserialize)]
 pub struct CreateUrlRequest {
@@ -17,6 +16,8 @@ pub struct CreateUrlRequest {
     pub default_fallback_url: String,
     #[serde(rename = "webhookUrl")]
     pub webhook_url: String,
+    #[serde(rename = "headHtml")]
+    pub head_html: String,
 }
 
 // URL 응답 구조체
