@@ -180,8 +180,8 @@ async fn create_short_url_handler(
     }
     // 기존 URL이 없는 경우 새로 생성
     match state.db.query_row(
-        "INSERT INTO urls (random_key, email, ios_deep_link, ios_fallback_url, android_deep_link, android_fallback_url, default_fallback_url, hashed_value, webhook_url) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9) RETURNING id",
-        (&random_key, &payload.email, &payload.ios_deep_link, &payload.ios_fallback_url, &payload.android_deep_link, &payload.android_fallback_url, &payload.default_fallback_url, &hashed_value, &payload.webhook_url),
+        "INSERT INTO urls (random_key, email, ios_deep_link, ios_fallback_url, android_deep_link, android_fallback_url, default_fallback_url, hashed_value, webhook_url, head_html) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10) RETURNING id",
+        (&random_key, &payload.email, &payload.ios_deep_link, &payload.ios_fallback_url, &payload.android_deep_link, &payload.android_fallback_url, &payload.default_fallback_url, &hashed_value, &payload.webhook_url, &payload.head_html),
         |row| row.get::<_, i64>(0),
     ) {
         Ok(id) => {
@@ -280,6 +280,7 @@ async fn redirect_to_original_handler(
             let android_deep_link = data["android_deep_link"].as_str().unwrap_or("");
             let android_fallback_url = data["android_fallback_url"].as_str().unwrap_or("");
             let default_fallback_url = data["default_fallback_url"].as_str().unwrap_or("");
+            let head_html = data["head_html"].as_str().unwrap_or("");
 
             let webhook_url = data["webhook_url"].as_str().unwrap_or("");
             if webhook_url != "" {
@@ -303,7 +304,8 @@ async fn redirect_to_original_handler(
                 .replace("{ios_fallback_url}", &ios_fallback_url)
                 .replace("{android_deep_link}", &android_deep_link)
                 .replace("{android_fallback_url}", &android_fallback_url)
-                .replace("{default_fallback_url}", &default_fallback_url);
+                .replace("{default_fallback_url}", &default_fallback_url)
+                .replace("{head_html}", &head_html);
             return (StatusCode::OK, Html(success_html)).into_response();
         }
     }
@@ -313,11 +315,11 @@ async fn redirect_to_original_handler(
 
     // 캐시에 없으면 DB에서 조회
     match state.db.query_row(
-        "SELECT random_key, ios_deep_link, ios_fallback_url, android_deep_link, android_fallback_url, default_fallback_url, webhook_url FROM urls WHERE id = ?1 and is_deleted = 0 and is_verified = 1",
+        "SELECT random_key, ios_deep_link, ios_fallback_url, android_deep_link, android_fallback_url, default_fallback_url, webhook_url, head_html FROM urls WHERE id = ?1 and is_deleted = 0 and is_verified = 1",
         [&url_id],
-        |row| Ok((row.get::<_, String>(0)?, row.get::<_, String>(1)?, row.get::<_, String>(2)?, row.get::<_, String>(3)?, row.get::<_, String>(4)?, row.get::<_, String>(5)?, row.get::<_, String>(6)?)),
-    ) {
-        Ok((random_key, ios_deep_link, ios_fallback_url, android_deep_link, android_fallback_url, default_fallback_url, webhook_url)) => {
+            |row| Ok((row.get::<_, String>(0)?, row.get::<_, String>(1)?, row.get::<_, String>(2)?, row.get::<_, String>(3)?, row.get::<_, String>(4)?, row.get::<_, String>(5)?, row.get::<_, String>(6)?, row.get::<_, String>(7)?)),
+        ) {
+        Ok((random_key, ios_deep_link, ios_fallback_url, android_deep_link, android_fallback_url, default_fallback_url, webhook_url, head_html)) => {
             // random_key 가 일치하는지 확인
             if random_key != request_random_key {
                 return (StatusCode::NOT_FOUND, "URL을 찾을 수 없습니다").into_response();
@@ -328,7 +330,8 @@ async fn redirect_to_original_handler(
                 "android_deep_link": android_deep_link,
                 "android_fallback_url": android_fallback_url,
                 "default_fallback_url": default_fallback_url,
-                "webhook_url": webhook_url
+                "webhook_url": webhook_url,
+                "head_html": head_html
             });
             let data_string = serde_json::to_string(&data).unwrap();
             state.cache.write().await.insert(short_key.clone(), CacheEntry {
@@ -352,7 +355,8 @@ async fn redirect_to_original_handler(
                 .replace("{ios_fallback_url}", &ios_fallback_url)
                 .replace("{android_deep_link}", &android_deep_link)
                 .replace("{android_fallback_url}", &android_fallback_url)
-                .replace("{default_fallback_url}", &default_fallback_url);
+                .replace("{default_fallback_url}", &default_fallback_url)
+                .replace("{head_html}", &head_html);
             return (StatusCode::OK, Html(success_html)).into_response()
         },
         Err(_) => (StatusCode::NOT_FOUND, "URL을 찾을 수 없습니다").into_response(),
