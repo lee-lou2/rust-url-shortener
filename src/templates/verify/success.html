@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이메일 인증 완료</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Pretendard', sans-serif;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #1a1a1a;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 360px;
+            width: 90%;
+            padding: 40px 20px;
+        }
+
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 32px;
+            position: relative;
+        }
+
+        .success-icon::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+            width: 16px;
+            height: 32px;
+            border-right: 3px solid #2563eb;
+            border-bottom: 3px solid #2563eb;
+            margin-top: -4px;
+        }
+
+        h1 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+
+        p {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 32px;
+        }
+
+        .code-container {
+            background-color: #f8fafc;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .code-container:hover {
+            background-color: #f1f5f9;
+        }
+
+        .code-text {
+            font-family: monospace;
+            font-size: 14px;
+            color: #334155;
+            margin: 0;
+            user-select: all;
+        }
+
+        .copy-feedback {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #1e293b;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .copy-feedback.show {
+            opacity: 1;
+        }
+
+        .button {
+            background-color: #2563eb;
+            color: white;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s ease;
+        }
+
+        .button:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #111111;
+                color: #ffffff;
+            }
+
+            .success-icon::after {
+                border-color: #60a5fa;
+            }
+
+            p {
+                color: #a3a3a3;
+            }
+
+            .code-container {
+                background-color: #1e293b;
+            }
+
+            .code-container:hover {
+                background-color: #233246;
+            }
+
+            .code-text {
+                color: #e2e8f0;
+            }
+
+            .button {
+                background-color: #60a5fa;
+            }
+
+            .button:hover {
+                background-color: #3b82f6;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="success-icon"></div>
+        <h1>인증이 완료되었습니다</h1>
+        <p>
+            이메일 주소가 성공적으로 확인되었습니다.<br>
+            아래 URL을 복사하여 서비스를 이용하실 수 있습니다.
+        </p>
+        <div class="code-container" onclick="copyToClipboard()">
+            <div class="copy-feedback">복사되었습니다!</div>
+            <p class="code-text">{short_url}</p>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard() {
+            const codeText = document.querySelector('.code-text').textContent;
+            navigator.clipboard.writeText(codeText).then(() => {
+                const feedback = document.querySelector('.copy-feedback');
+                feedback.classList.add('show');
+                setTimeout(() => {
+                    feedback.classList.remove('show');
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+
+</html>

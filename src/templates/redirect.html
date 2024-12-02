@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Redirection</title>
+    <!-- 기본 fallback_url의 OG 태그 설정 -->
+    <!-- <meta property="og:title" content="기본 제목">
+    <meta property="og:description" content="기본 설명">
+    <meta property="og:image" content="기본 이미지 URL">
+    <meta property="og:url" content="https://yourdefaultfallback.com"> -->
+</head>
+
+<body>
+    <script>
+        window.onload = function () {
+            var default_fallback_url = '{default_fallback_url}';
+            var deeplink_ios = '{ios_deep_link}';
+            var fallback_url_ios = '{ios_fallback_url}' || default_fallback_url;
+            var deeplink_android = '{android_deep_link}';
+            var fallback_url_android = '{android_fallback_url}' || default_fallback_url;
+
+            function isAndroid() {
+                return /Android/i.test(navigator.userAgent);
+            }
+
+            function isiOS() {
+                return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+            }
+
+            if (isAndroid()) {
+                if (deeplink_android) {
+                    // Android 딥링크 시도
+                    window.location.href = deeplink_android;
+                    setTimeout(function () {
+                        // 앱이 설치되어 있지 않으면 fallback URL로 이동
+                        window.location.href = fallback_url_android;
+                    }, 2000);
+                } else {
+                    // Android 딥링크가 없으면 바로 fallback URL로 이동
+                    window.location.href = fallback_url_android;
+                }
+            } else if (isiOS()) {
+                if (deeplink_ios) {
+                    // iOS 딥링크 시도
+                    window.location.href = deeplink_ios;
+                    setTimeout(function () {
+                        // 앱이 설치되어 있지 않으면 fallback URL로 이동
+                        window.location.href = fallback_url_ios;
+                    }, 2000);
+                } else {
+                    // iOS 딥링크가 없으면 바로 fallback URL로 이동
+                    window.location.href = fallback_url_ios;
+                }
+            } else {
+                // iOS나 Android가 아니면 기본 fallback URL로 이동
+                window.location.href = default_fallback_url;
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,5 @@
+.env
+target/
+
+.idea/
+sqlite3.db

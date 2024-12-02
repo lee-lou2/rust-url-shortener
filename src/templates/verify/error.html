@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이메일 인증 실패</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Pretendard', sans-serif;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #1a1a1a;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 360px;
+            width: 90%;
+            padding: 40px 20px;
+        }
+
+        .error-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 32px;
+            position: relative;
+        }
+
+        .error-icon::before,
+        .error-icon::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 32px;
+            height: 3px;
+            background-color: #e57373;
+            border-radius: 1.5px;
+        }
+
+        .error-icon::before {
+            transform: translate(-50%, -50%) rotate(45deg);
+        }
+
+        .error-icon::after {
+            transform: translate(-50%, -50%) rotate(-45deg);
+        }
+
+        h1 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+            color: #e57373;
+        }
+
+        p {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 32px;
+        }
+
+        .error-details {
+            background-color: #ffebee;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .error-text {
+            font-size: 14px;
+            color: #c62828;
+            margin: 0;
+        }
+
+        .button {
+            background-color: #e57373;
+            color: white;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s ease;
+        }
+
+        .button:hover {
+            background-color: #ef5350;
+            transform: translateY(-1px);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .support-text {
+            font-size: 13px;
+            color: #666;
+            margin-top: 24px;
+        }
+
+        .support-link {
+            color: #e57373;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .support-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #111111;
+                color: #ffffff;
+            }
+
+            .error-icon::before,
+            .error-icon::after {
+                background-color: #ef9a9a;
+            }
+
+            h1 {
+                color: #ef9a9a;
+            }
+
+            p {
+                color: #a3a3a3;
+            }
+
+            .error-details {
+                background-color: #311b1b;
+            }
+
+            .error-text {
+                color: #ffcdd2;
+            }
+
+            .button {
+                background-color: #ef9a9a;
+            }
+
+            .button:hover {
+                background-color: #e57373;
+            }
+
+            .support-text {
+                color: #a3a3a3;
+            }
+
+            .support-link {
+                color: #ef9a9a;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="error-icon"></div>
+        <h1>인증에 실패했습니다</h1>
+        <p>
+            이메일 인증에 실패했습니다.<br>
+            다시 시도하시거나 새로운 인증 코드를 요청해주세요.
+        </p>
+        <p class="support-text">
+            문제가 계속되면 <a href="mailto:lee@lou2.kr" class="support-link">lee@lou2.kr</a>로 문의해주세요.
+        </p>
+    </div>
+</body>
+
+</html>
