@@ -1,3 +1,1 @@
-mod migrate;
-
-pub use migrate::migrate;
+pub mod migrate;
