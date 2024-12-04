@@ -1,7 +1,7 @@
 use rusqlite::Connection;
 use rusqlite::Result;
 
-pub fn migrate(db: &Connection) -> Result<(), rusqlite::Error> {
+pub fn db_init(db: &Connection) -> Result<(), rusqlite::Error> {
     db.execute(
         "CREATE TABLE IF NOT EXISTS urls (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
